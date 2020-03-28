@@ -20,7 +20,7 @@ pipeline {
                 }
             }
         }
-        stage('Post Deploy Test')
+        stage('Post Deploy Test') {
             steps {
                 echo 'Testing Deployment'
                 String webSite = 'https://mansong-jenkins-udacity.s3.us-east-1.amazonaws.com/index.html'
@@ -29,6 +29,7 @@ pipeline {
                     currentBuild.result = 'FAILURE'
                 }
             }
+        }
     }
     /* Cleanup workspace */
     post {
