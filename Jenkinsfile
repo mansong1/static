@@ -26,6 +26,7 @@ pipeline {
                 script {
                     String webSite = 'https://mansong-jenkins-udacity.s3.us-east-1.amazonaws.com/index.html'
                     def returnCode = sh(returnStdout: true, script: "curl -sLI -o /dev/null -w '%{http_code}' ${webSite}")
+                    echo returnCode
                     if (returnCode != 200 && returnCode != 201) {
                         currentBuild.result = 'FAILURE'
                     }
