@@ -1,3 +1,5 @@
+properties([pipelineTriggers([githubPush()])])
+
 pipeline {
     agent any
     stages {
@@ -12,11 +14,17 @@ pipeline {
                     timeout(time: 3, unit: 'MINUTES') {
                         retry(5) {
                             sh 'echo "Uploading content with AWS creds"'
-                            s3Upload(file:'index.html', bucket:'mansong-jenkins-udacity', path:'index.html')
+                            s3Upload(pathStyleAccessEnabled:true, payloadSigningEnabled: true, file:'index.html', bucket:'mansong-jenkins-udacity')
                         }
                     }
                 }
             }
         }
+    }
+    /* Cleanup workspace */
+    post {
+       always {
+           deleteDir()
+       }
     }
 }
