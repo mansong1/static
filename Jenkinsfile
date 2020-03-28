@@ -11,12 +11,12 @@ pipeline {
                 withAWS(region:'us-east-1',credentials: 'aws-static') {
                     timeout(time: 3, unit: 'MINUTES') {
                         retry(5) {
+                            sh 'echo "Uploading content with AWS creds"'
                             s3Upload(file:'index.html', bucket:'mansong-jenkins-udacity', path:'index.html')
                         }
                     }
                 }
             }
         }
-
     }
 }
