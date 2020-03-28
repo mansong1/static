@@ -9,7 +9,9 @@ pipeline {
             }
         }
         stage('Lint HTML') {
-            sh 'tidy -q -e *.html'
+            steps {
+                sh 'tidy -q -e *.html'
+            }
         }
     }
 }
