@@ -13,13 +13,22 @@ pipeline {
                 withAWS(region:'us-east-1',credentials: 'aws-static') {
                     timeout(time: 3, unit: 'MINUTES') {
                         retry(5) {
-                            sh 'echo "Uploading content with AWS creds"'
+                            echo 'Uploading content with AWS creds'
                             s3Upload(pathStyleAccessEnabled:true, payloadSigningEnabled: true, file:'index.html', bucket:'mansong-jenkins-udacity')
                         }
                     }
                 }
             }
         }
+        stage('Post Deploy Test')
+            steps {
+                echo 'Testing Deployment'
+                String webSite = 'https://mansong-jenkins-udacity.s3.us-east-1.amazonaws.com/index.html'
+                def returnCode = sh(returnStdout: true, script: 'curl -s -o /dev/null -I -w "%{http_code}" ${webSite}') as Integer
+                if (returnCode != 200) {
+                    currentBuild.result = 'FAILURE'
+                }
+            }
     }
     /* Cleanup workspace */
     post {
